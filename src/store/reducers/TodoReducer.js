@@ -1,28 +1,18 @@
-import { v4 as uuidv4 } from "uuid";
+import { ADD_TODOS, DELETE_TODOS, GET_TODOS, MARK_COMPLETED } from "../types";
 
 const initialState = {
-  todos: [
-    {
-      id: uuidv4(),
-      title: "Viec 1",
-      completed: false,
-    },
-    {
-      id: uuidv4(),
-      title: "Viec 2",
-      completed: false,
-    },
-    {
-      id: uuidv4(),
-      title: "Viec 3",
-      completed: false,
-    },
-  ],
+  todos: [],
 };
 
 const TodoReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "MARK_COMPLETED":
+    case GET_TODOS:
+      return {
+        ...state,
+        todos: action.payload,
+      };
+
+    case MARK_COMPLETED:
       //ko đươc cho State == gì đó vì nó sẽ biến thành mặc định
       return {
         ...state,
@@ -32,16 +22,18 @@ const TodoReducer = (state = initialState, action) => {
         }),
       };
 
-    case "ADD_TODOS":
+    case ADD_TODOS:
       return {
-        ...state, todos: [...state.todos,
-            action.payload]
+        ...state,
+        todos: [...state.todos, action.payload],
       };
 
-      case "DELETE_TODOS":
-        return {...state,
-           todos: state.todos.filter(todo => todo.id !== action.payload)}
-      
+    case DELETE_TODOS:
+      return {
+        ...state,
+        todos: state.todos.filter((todo) => todo.id !== action.payload),
+      };
+
     default:
       return state;
   }

@@ -1,12 +1,15 @@
 import { Button } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import "antd/dist/antd.css";
 import TodoForm from "./TodoForm";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { deleteTodos, markCompleted } from "../store/actions/TodoAction";
+import { getTodos, deleteTodos, markCompleted } from "../store/actions/TodoAction";
 
-const Todos = ({ todos, markCompleted, deleteTodos }) => {
+const Todos = ({ getTodos, todos, markCompleted, deleteTodos }) => {
+  useEffect(()=>{
+    getTodos()
+  },[])
   return (
     <div className="todo-list">
       <TodoForm />
@@ -15,11 +18,11 @@ const Todos = ({ todos, markCompleted, deleteTodos }) => {
           <li
             key={todo.id}
             className={todo.completed ? "completed qcont" : "qcont"}
-            onClick={deleteTodos.bind(this, todo.id)}
           >
             <input
               type="checkbox"
               className="checkBox"
+              checked={todo.completed}
               onChange={markCompleted.bind(this, todo.id)}
             />
             {todo.title}{" "}
@@ -40,9 +43,10 @@ Todos.propTypes = {
   todos: PropTypes.array.isRequired,
   markCompleted: PropTypes.func.isRequired,
   deleteTodos: PropTypes.func.isRequired,
+  getTodos: PropTypes.func.isRequired
 };
 const mapStateToProps = (state) => ({
   //todos nay ko liên quan toi todos trong reducer
   todos: state.myTodos.todos,
 });
-export default connect(mapStateToProps, { markCompleted, deleteTodos })(Todos);
+export default connect(mapStateToProps, {getTodos, markCompleted, deleteTodos })(Todos);
